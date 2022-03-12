@@ -1,5 +1,5 @@
 """
-Clément Dauvilliers - Grenoble INP / EPFL 11/03/2022
+Clément Dauvilliers - Grenoble INP / EPFL 12/03/2022
 
 Scraps the 50 best selling singles in France for each year between
 1985 and 1993 from https://tubesenfrance.com/. The ranking is the
@@ -10,9 +10,9 @@ results.
 """
 import pandas as pd
 import requests
-import re
 import os
 from bs4 import BeautifulSoup
+from utils import clean_scrapped_entry
 
 
 def main():
@@ -41,6 +41,7 @@ def main():
         songs_data.drop(0, inplace=True)
         # removes any row in the df that contains an empty element
         songs_data.applymap(lambda val: val if val != '' else None).dropna(inplace=True)
+        songs_data = songs_data.applymap(clean_scrapped_entry)
 
         # Adds the column filled with the current year that is being treated
         # (this column is the same for every song in the df).
@@ -49,7 +50,7 @@ def main():
         yearly_rankings.append(songs_data)
 
     final_df = pd.concat(yearly_rankings)
-    final_df.to_csv(os.path.join("data", f"top_fr_1985_1993.csv"), sep='\t')
+    final_df.to_csv(os.path.join("data", f"top_fr_1985_1993.tsv"), sep='\t')
     return 0
 
 
