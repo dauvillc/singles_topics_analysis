@@ -19,7 +19,7 @@ GENIUS_API_TOKEN = 'HAZ_eq6H-8t0a0Gxy6OJgbJbkcngxKjw5R5nL0a2pFy9HI9dhK1k-Ff9ZTvu
 
 def main():
     songs_list = pd.read_csv(sys.argv[1], sep="\t")[['artist', 'title']]
-    songs_list = songs_list.applymap(lambda s: s.lower())
+    songs_list = songs_list.applymap(lambda s: str(s).lower())
 
     genius = Genius(GENIUS_API_TOKEN)
     genius.remove_section_headers = True
@@ -43,9 +43,6 @@ def main():
     songs_list['lyrics'] = songs_lyrics
     songs_list['lyrics_state'] = lyrics_states
     songs_list.to_json(sys.argv[2])
-
-    skipped_songs_df = pd.DataFrame({'artist': skipped_songs_artists,
-                                     'title': skipped_songs_titles})
 
     return 0
 
