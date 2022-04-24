@@ -18,19 +18,20 @@ GENIUS_API_TOKEN = 'HAZ_eq6H-8t0a0Gxy6OJgbJbkcngxKjw5R5nL0a2pFy9HI9dhK1k-Ff9ZTvu
 
 
 def main():
-    songs_list = pd.read_csv(sys.argv[1], sep="\t")[['artist', 'title']]
-    songs_list = songs_list.applymap(lambda s: str(s).lower())
+    songs_list = pd.read_csv(sys.argv[1], sep="\t")[['artist', 'title', 'year']]
+    songs_list['artist'] = songs_list['artist'].apply(lambda s: str(s).lower())
+    songs_list['title'] = songs_list['title'].apply(lambda s: str(s).lower())
 
     genius = Genius(GENIUS_API_TOKEN)
     genius.remove_section_headers = True
     genius.skip_non_songs = True
 
-    songs_lyrics, lyrics_states = [], []
+    songs_lyrics, lyrics_states, songs_years = [], [], []
     skipped_songs_artists, skipped_songs_titles = [], []
     for index, song_data in tqdm(songs_list.iterrows(), total=songs_list.shape[0]):
-        song_info = genius.search_song(title=song_data['title'],
-                                       artist=song_data['artist'])
         try:
+            song_info = genius.search_song(title=song_data['title'],
+                                           artist=song_data['artist'])
             songs_lyrics.append(song_info.lyrics)
             lyrics_states.append(song_info.lyrics_state)
         except:
