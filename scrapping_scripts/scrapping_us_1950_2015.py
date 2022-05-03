@@ -1,5 +1,5 @@
 """
-Usage: python3 extract_billboard_data.py <destination_file.json>
+Usage: python3 scrapping_us_1950_2015.py <destination_file.json>
 
 Clément Dauvilliers - EPFL - 03/05/2022
 
@@ -13,7 +13,7 @@ import pandas as pd
 
 # Repertory in which the lyrics for every song for each year are saved.
 # Contains a single json file for each year (e.g. 1953.json).
-DATA_DIR = "data/billboard/data/years"
+DATA_DIR = "data/billboard_data"
 
 
 if __name__ == "__main__":
@@ -34,6 +34,6 @@ if __name__ == "__main__":
     # indicates whether the lyrics are complete, which is always the case
     # here.
     final_df['lyrics_state'] = ['complete' for _ in range(final_df.shape[0])]
-    final_df.reset_index().to_json(sys.argv[1])
+    final_df.reset_index(drop=True).to_json(sys.argv[1])
 
 

@@ -47,7 +47,7 @@ def main():
         yearly_rankings.append(songs_data)
 
     final_df = pd.concat(yearly_rankings)
-    final_df.to_csv(os.path.join("data", f"top_uk_after2005.tsv"), sep='\t')
+    final_df.to_csv(os.path.join("data/singles_lists", f"top_uk_2005_2020.tsv"), sep='\t')
     return 0
 
 
