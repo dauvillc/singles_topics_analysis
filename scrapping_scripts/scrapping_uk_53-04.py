@@ -24,9 +24,9 @@ def aggregate_weekly_rankings(songs, artists, positions):
     :param positions: positions of every during every week, concatenated
     :return: a pandas DataFrame giving the aggregated ranking.
     """
-    weekly_df = pd.DataFrame({"song": songs, "artist": artists, "position": positions})
+    weekly_df = pd.DataFrame({"title": songs, "artist": artists, "position": positions})
     weekly_df['week_score'] = 100 - weekly_df['position']
-    year_scores = weekly_df.groupby(['song', 'artist']).sum().reset_index()
+    year_scores = weekly_df.groupby(['title', 'artist']).sum().reset_index()
     top_songs = year_scores.sort_values('week_score', ascending=False).iloc[:100].reset_index()
     top_songs = top_songs.drop('week_score', axis=1)
     top_songs['position'] = [i for i in range(top_songs.shape[0])]
