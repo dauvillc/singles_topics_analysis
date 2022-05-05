@@ -36,4 +36,4 @@ if __name__ == "__main__":
     os.system(f"python3 scrapping_scripts/scrapping_us_1950_2015.py {_DEST_REP}/us_1950_2015.json")
 
     # STEP 3: merge
-    os.system(f"python3 scrapping_scripts/merge_datasets {_FINAL_FILE} {_DEST_REP}")
+    os.system(f"python3 scrapping_scripts/merge_datasets.py {_FINAL_FILE} {_DEST_REP}")
