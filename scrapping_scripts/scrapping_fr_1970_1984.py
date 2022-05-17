@@ -5,7 +5,7 @@ http://chartssinglestop40france.blogspot.com/
 """
 import pandas as pd
 import requests
-import os
+import sys
 from bs4 import BeautifulSoup
 from utils import clean_scrapped_entry
 
@@ -49,7 +49,7 @@ def main():
         yearly_rankings.append(songs_data)
 
     final_df = pd.concat(yearly_rankings)
-    final_df.to_csv(os.path.join("data", f"top_fr_1970_1984.tsv"), sep='\t')
+    final_df.to_csv(sys.argv[1], sep='\t')
     return 0
 
 

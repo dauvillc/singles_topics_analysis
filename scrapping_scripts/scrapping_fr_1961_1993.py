@@ -10,7 +10,7 @@ results.
 """
 import pandas as pd
 import requests
-import os
+import sys
 from bs4 import BeautifulSoup
 from utils import clean_scrapped_entry
 
@@ -21,11 +21,11 @@ def main():
 
     # Step 1: for each year, obtain a pandas dataframe containing the ranking
     yearly_rankings = []
-    for year in range(1985, 1994):
+    for year in range(1961, 1994):
         print(f"Processing year {year}")
         # Retrieves the HTML page from the website via http
         # the full url is "website.com/annees-[80|90]/classements-de-[annee]/
-        url = base_url + f"{int((year - 1900)/10)}0/classements-de-{year}/"
+        url = base_url + f"{int((year - 1900) / 10)}0/classements-de-{year}/"
         page = requests.get(url)
 
         # Parse the HTML content using BeautifulSoup4
@@ -50,7 +50,7 @@ def main():
         yearly_rankings.append(songs_data)
 
     final_df = pd.concat(yearly_rankings)
-    final_df.to_csv(os.path.join("data", f"top_fr_1985_1993.tsv"), sep='\t')
+    final_df.to_csv(sys.argv[1], sep='\t')
     return 0
 
 
