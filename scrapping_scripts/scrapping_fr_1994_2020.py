@@ -3,11 +3,12 @@ Clément Dauvilliers - Grenoble INP / EPFL 12/03/2022
 
 Scraps the 50 / 100 best sellings singles between 1994 and 2020 according to the
 official SNEP yearly rankings.
-https://snepmusique.com/les-tops/le-top-de-lannee/top-singles-annee/?annee=1994
+
 """
 import pandas as pd
 import requests
 import os
+import sys
 from bs4 import BeautifulSoup
 from utils import clean_scrapped_entry
 
@@ -30,7 +31,12 @@ def main():
         # whose class are "artiste" or "titre"
         artists = [div_html.text for div_html in soup.find_all('div', class_='artiste')]
         titles = [div_html.text for div_html in soup.find_all('div', class_='titre')]
-        songs_data = pd.DataFrame({'artist': artists, 'title': titles})
+        # Retrieves the rank of the song, which we'll use to keep only the top 100
+        ranks = [int(div_html.text) for div_html in soup.find_all('div', class_='rang')]
+        # Assembles those data into a DataFrame
+        songs_data = pd.DataFrame({'artist': artists, 'title': titles, 'rank': ranks})
+        # Keeps only singles that are top 100 or better
+        songs_data = songs_data[songs_data['rank'] <= 101].drop('rank', axis=1)
 
         # removes any row in the df that contains an empty element
         songs_data.applymap(lambda val: val if val != '' else None).dropna(inplace=True)
@@ -43,7 +49,7 @@ def main():
         yearly_rankings.append(songs_data)
 
     final_df = pd.concat(yearly_rankings)
-    final_df.to_csv(os.path.join("data", f"top_fr_1994_2020.tsv"), sep='\t')
+    final_df.to_csv(sys.argv[1], sep='\t')
     return 0
 
 
